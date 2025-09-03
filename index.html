@@ -91,11 +91,13 @@
 
 
     <script>
-        // ******** Edit ********
+        // ******** CONFIGURATION ********
         const MY_LIFF_ID = '2008042789-LBy0X8nN'; 
         const SUPABASE_URL = 'https://ykctcctxpxvqveevvwdi.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrY3RjY3R4cHh2cXZlZXZ2d2RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4MDA0NjEsImV4cCI6MjA3MjM3NjQ2MX0.FdaFL3dcbsnXAzskOWGtJ3o7qqdQk1jE4Ym70lROHYY';        
-        // ************************************
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrY3RjY3R4cHh2cXZlZXZ2d2RpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjgwMDQ2MSwiZXhwIjoyMDcyMzc2NDYxfQ.368hv7wLa6MPvXqYq2g5MEXiWwaATWeOoHfwlhFeHvE';
+        
+        const SOUND_SUCCESS_URL = 'assets/success.mp3'; 
+        const SOUND_ERROR_URL = 'assets/error.mp3';  
 
         // --- UI Elements ---
         const loadingState = document.getElementById('loading-state');
@@ -147,6 +149,15 @@
             logMessage.textContent = message;
             logMessage.classList.toggle('text-red-500', isError);
             logMessage.classList.toggle('text-green-600', !isError);
+        }
+
+        function playSound(url) {
+            try {
+                const audio = new Audio(url);
+                audio.play();
+            } catch (e) {
+                console.error("เล่นเสียงไม่ได้ว่ะ:", e);
+            }
         }
 
         const qrCodeSuccessCallback = (decodedText, decodedResult) => {
@@ -212,9 +223,10 @@
                 const plateValue = plateInput.value.trim();
                 const reserveValue = reserveInput.value.trim();
 
-                if (!plateValue && !reserveValue) {
-                    alert('กรุณากรอกข้อมูลอย่างน้อย 1 ช่อง');
-                    return;
+                if (!plateValue || !reserveValue) {
+                    playSound(SOUND_ERROR_URL);
+                    alert('มึงต้องกรอกให้ครบทั้ง 2 ช่องโว้ย!');
+                    return; 
                 }
 
                 updateLog('กำลังบันทึกข้อมูล...');
@@ -223,20 +235,22 @@
                 try {
                     const { data, error } = await supabaseClient.functions.invoke('save-plate-data', {
                         body: { 
-                            plate: plateValue || null, // Send null if empty
+                            plate: plateValue || null,
                             createBy: userProfile.displayName,
-                            reserveTruck: reserveValue || null // Send null if empty
+                            reserveTruck: reserveValue || null
                         }
                     });
 
                     if (error) throw error;
                     
+                    playSound(SOUND_SUCCESS_URL);
                     updateLog(`บันทึกข้อมูลสำเร็จ!`, false);
                     plateInput.value = '';
                     reserveInput.value = '';
                     reserveWarning.classList.add('hidden');
 
                 } catch (err) {
+                    playSound(SOUND_ERROR_URL);
                     console.error('Save Error:', err);
                     updateLog(`เกิดข้อผิดพลาดในการบันทึก: ${err.message}`, true);
                 } finally {
