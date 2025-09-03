@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แอปบันทึกข้อมูลรถ</title>
+    <title>แอปพลิเคชันบันทึกข้อมูลรถ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -51,7 +51,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </button>
                     </div>
-                    <p id="reserve-warning" class="text-red-600 text-xs mt-1 hidden">รูปแบบไม่ถูกต้อง (เช่น: HI250903-001)</p>
+                    <p id="reserve-warning" class="text-red-600 text-xs mt-1 hidden">รูปแบบไม่ถูกต้อง (ตัวอย่าง: HI250903-001)</p>
                 </div>
 
                 <div>
@@ -82,7 +82,7 @@
     </div>
 
     <div id="scanner-container" class="fixed inset-0 bg-black bg-opacity-90 flex-col items-center justify-center hidden z-50 p-4">
-        <p class="text-white text-lg font-semibold mb-4">วางบาร์โค้ดให้อยู่ในกรอบ</p>
+        <p class="text-white text-lg font-semibold mb-4">กรุณาวางบาร์โค้ดให้อยู่ในกรอบ</p>
         <div id="reader" class="w-full max-w-sm"></div>
         <button id="close-scanner-btn" class="btn mt-6 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg text-lg">
             ยกเลิก
@@ -130,8 +130,8 @@
                 setupUI();
                 setupEventListeners();
             } catch (error) {
-                console.error('LIFF Init Error:', error);
-                statusMessage.textContent = `เกิดข้อผิดพลาด: ${error.message}`;
+                console.error('LIFF Initialization Error:', error);
+                statusMessage.textContent = `เกิดข้อผิดพลาดในการเริ่มต้น: ${error.message}`;
             }
         }
 
@@ -156,7 +156,8 @@
                 const audio = new Audio(url);
                 audio.play();
             } catch (e) {
-                console.error("เล่นเสียงไม่ได้ว่ะ:", e);
+                // เปลี่ยนข้อความ Console Log ให้เป็นทางการ
+                console.error("เกิดข้อผิดพลาดในการเล่นเสียง:", e);
             }
         }
 
@@ -180,7 +181,7 @@
 
             html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
             .catch(err => {
-                console.error("ไม่สามารถเริ่มสแกนได้", err);
+                console.error("ไม่สามารถเริ่มต้นการสแกนได้", err);
                 updateLog(`ไม่สามารถเปิดกล้องได้: ${err}`, true);
                 stopScanner();
             });
@@ -193,7 +194,7 @@
                 header.classList.remove('hidden');
                 footer.classList.remove('hidden');
             }).catch(err => {
-                console.error("ไม่สามารถหยุดสแกนเนอร์ได้", err);
+                console.error("ไม่สามารถหยุดการทำงานของสแกนเนอร์ได้", err);
             });
         }
 
@@ -225,7 +226,8 @@
 
                 if (!plateValue || !reserveValue) {
                     playSound(SOUND_ERROR_URL);
-                    alert('มึงต้องกรอกให้ครบทั้ง 2 ช่องโว้ย!');
+                    // เปลี่ยนข้อความ Alert ให้สุภาพ
+                    alert('กรุณากรอกข้อมูลให้ครบถ้วนครับ');
                     return; 
                 }
 
