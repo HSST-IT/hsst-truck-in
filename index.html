@@ -76,7 +76,7 @@
         </div>
         
         <footer id="footer" class="text-center py-4 mt-auto hidden">
-            <p class="text-xs text-gray-500">HSST TRUCKLIST SYSTEM &copy; 2025 - V1.0</p>
+            <p class="text-xs text-gray-500">HSST TRUCKLIST SYSTEM &copy; 2025 - V1.1</p>
         </footer>
 
     </div>
@@ -156,7 +156,6 @@
                 const audio = new Audio(url);
                 audio.play();
             } catch (e) {
-                // เปลี่ยนข้อความ Console Log ให้เป็นทางการ
                 console.error("เกิดข้อผิดพลาดในการเล่นเสียง:", e);
             }
         }
@@ -226,7 +225,6 @@
 
                 if (!plateValue || !reserveValue) {
                     playSound(SOUND_ERROR_URL);
-                    // เปลี่ยนข้อความ Alert ให้สุภาพ
                     alert('กรุณากรอกข้อมูลให้ครบถ้วนครับ');
                     return; 
                 }
